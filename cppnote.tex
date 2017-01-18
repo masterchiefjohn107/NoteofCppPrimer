@@ -402,6 +402,7 @@ To use the \textbf{string} type, we must include the string header.
 		is>>s           & Reads whitespace-separated                                                \\
 		getLine(is,s)   & Reads a line of input from is into s. Returns is.                         \\
 		s.empty()       & Returns true if s is empty; otherwise returns false                       \\
+		s.size()		& Returns the number of characters in s
 		s[n]            & Returns a reference to the char at position n in s;position start at 0.   \\
 		s1+s2           & Returns a string that is a conactenation of s1 and s2                     \\
 		s1=s2           & Replaces characters in s1 with a copy of s2                               \\
@@ -412,6 +413,19 @@ To use the \textbf{string} type, we must include the string header.
 	\end{tabular}
 	\caption*{string Operations}
 \end{table}%
+
+It might be logical to expect that size returns an int or, an unsigned. Instead, size returns a string::size_type value. Any variable used to store the result from the string size operation should be of type string::size_type.
+
+When we mix string\$ and string or character literals, at least one operand to each + operator must be of string type:
+\begin{lstlisting}
+	string s1="hello,",s2="world\n";      //ok
+	string s4=s1+", ";                    //ok
+	string s5="hello" + ", ";             //error:no string operand
+	string s6=s1+", "+"world";            //ok
+	string s7="hello"+", "+s2;            //error:can't add string literals
+\end{lstlisting}
+
+\qd{For historical reasons, and for compatibility with C, string literals are not standard library string\$. It is important to remember that these types differ when you use string literals and library string\$.}
 
 
 \end{document}
