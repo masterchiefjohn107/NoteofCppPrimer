@@ -1,0 +1,418 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{listings} %插入代码
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{courier}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{geometry} %页面设置
+\usepackage{indentfirst} %段落缩进设置
+\usepackage{chngpage} %可以设置段落整体左右缩进等等，方法是\begin{adjustwidth}{1em}{0em}
+\usepackage{iitem} %多重列表
+%\renewcommand{\sfdefault}{phv}
+\setmainfont{msyh.ttf}%设置英文字体
+\setCJKmainfont{微软雅黑}%设置中文字体
+
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}%section新起一页
+
+\geometry{a4paper,left=1cm,right=1cm,top=2cm,bottom=2cm}
+ \setlength{\parindent}{0em}
+ \setlength{\parskip}{1em}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+	 backgroundcolor=\color{lightgray}, 
+	 basicstyle = \footnotesize,       
+	 breakatwhitespace = false,        
+	 breaklines = true,                 
+	 captionpos = b,                    
+	 commentstyle = \color{mygreen},
+	 extendedchars = false,             
+	 frame =single, 
+	 framerule=0.5pt,
+	 keepspaces=true,
+	 keywordstyle=\color{blue}\bfseries, % keyword style
+	 language = C++,                     % the language of code
+	 otherkeywords={string}, 
+	 numbers=left, 
+	 numbersep=5pt,
+	 numberstyle=\tiny\color{mygray},
+	 rulecolor=\color{black},         
+	 showspaces=false,  
+	 showstringspaces=false, 
+	 showtabs=false,    
+	 stepnumber=1,         
+	 stringstyle=\color{mymauve},        % string literal style
+	 tabsize=2,          
+	 title=\lstname                      
+}
+%定义一个强调格式，红色加粗，使用方法\qd{你的内容}，或者\begin{qds} 你的内容 \end{qds}
+\usepackage{color}
+\newcommand \qds {\bf \color{red}}
+\newcommand \qd[1] {\begin{qds} {#1} \end{qds}}
+\title{Note of C++ Primer 5th Edition }
+\author{john107}
+\date{\today}
+
+
+\begin{document}
+\maketitle
+\clearpage
+\tableofcontents
+\clearpage
+
+\section{Getting started}
+
+\subsection{Reading an unknown number of inputs}
+On Windows we enter an end-of-file by typing ctrl+z, while on Unix and Mac OS, ctrl+d
+\begin{lstlisting}[language=C++]
+while (std::cin >> value){}
+\end{lstlisting}
+
+\subsection{First look at I/O}
+\begin{itemize}
+	\item{\qd{cin}:standard input}
+	\item{\qd{cout}:standard output}
+	\item{\qd{cerr}:standard error}
+	\item{\qd{clog}:general information about the execution of the program}
+\end{itemize}
+
+\subsection{Comments}
+We often need to comment out a  block of code during debugging. Because that code might contain nested comment  pairs, the best way to comment a block of code is to insert single-line comments at the beginning of each line in the section we want to ignore.
+
+\subsection{Use User-Defined Class}
+Headers from the standard library are enclosed in angle brackets (<>). Those that are not part of the library are enclosed in double quotes ("").
+\begin{lstlisting}
+#include <iostream>
+#include "Sales_item.h"  
+\end{lstlisting}
+
+A member function is a function that is  defined as part of a class. Member functions are sometimes referred to as \qd{method}.
+
+\qd{The dot operator} applies only to objects of class type, its left-hand operand must be an object of class type, and its right-hand operand must name a member of that type.
+
+\section{Variables and Basic Types}
+
+\subsection{Primitive Built-in Types}
+\qd{The Standard C++ library} implement a rich library of class types and associated functions.
+
+A few rules of thumb can be useful in deciding which type to use:
+\begin{itemize}
+	\item{Use an unsigned type when you know that the values cannot be negative}
+	\item{Use int for integer arithmetic. short is usually too small and, in practice, long often has the same size as int. If your data values are larger than the minimum guaranteed size of an int, then use long long.}
+	\item{Do not use plain char or bool in arithmetic expressions. Use them only to hold characters or truth values. Computations using char are especially problematic because char is signed on some mathines and unsigned on others. If you need a tiny integer, explicitly specify either signed char or unsigned char.}
+	\item{Use double for floating-point computations; float usually does not have enough precision, and the cost of double-precision calculations versus single-precision is negligible. In fact, on some machines, double-precision operations are faster than single. The precision offered by long double usually is unnecessary and often entails considerable run-time cost.}	
+\end{itemize}
+
+\subsection{Expressions Involving Unsigned Types}
+Regardless of whether one or both operands are unsigned, if we subtract a value from an unsigned, we must be sure that the result cannot be negative.
+
+It is essential to remember that signed values are automatically converted to unsigned.
+
+\subsection{Literals}
+A value, such as 42, is known as a literal because its value self-evident.
+
+Integer literals that begin with 0(zero) are interpreted as octal. Those that begin with either 0x or 0X are interpreted as hexadecimal. 
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		Prefix & Meaning & Type \\
+		\hline
+		u & Unicode 16 character & char16\_t \\
+		U & Unicode 32 character & char32\_t \\
+		L & wide character & wchar\_t \\
+		u8 & utf-8(string literals only) & char \\
+		\hline
+	\end{tabular}%
+	\caption*{Character and Character String Literals}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		Sufix & Minimum Type \\
+		\hline
+		u or U & unsigned \\
+		l or L & long \\
+		ll or LL & long long \\
+		\hline
+	\end{tabular}%
+	\caption*{Integer Literals}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		Sufix & Minimum Type \\
+		\hline
+		f or F & float \\
+		l or L & long double \\
+		\hline
+	\end{tabular}%
+	\caption*{Floating-Point Literals}
+\end{table}
+
+A character enclosed within single quotes is a literal of type char, Zero or more characters enclosed in double quotation marks is a string literal.
+
+The type of a string literal is array of constant char\$. The complier appends a null character ('\textbackslash 0') to every string literal. Thus, the actual size of a string literal is one more than its apparent size. 
+
+Two string literals that appear adjacent to one another and that are separated only by spaces, tabs, or newlines are conactenated into a single literal.
+\begin{lstlisting}
+	std::cout<<"a really, really long string literal "
+			   "that spans two lines"<<std::endl;
+\end{lstlisting}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|l|}
+		\hline
+		newline & \textbackslash n & horizontal tab & \textbackslash t & alert(bell) & \textbackslash a \\
+		vertical tab & \textbackslash v  & backspace &  \textbackslash & double quote &  \textbackslash " \\
+		backslash &  \textbackslash  \textbackslash & question mark &  \textbackslash ? & single quote &  \textbackslash ' \\
+		carriage return &  \textbackslash r & formfeed &  \textbackslash f & & \\
+		\hline		
+	\end{tabular}%
+	\caption*{Several escape sequences}
+\end{table}
+
+We use an escape sequence as if it were a single character.
+
+We can also write a generalized escape sequence, which is  \textbackslash x followed by one or more hexadecimal digits or a  \textbackslash followed by one, two, three octal digits. The value represents the numerical value of the character. For example:
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|l|}
+		\hline
+		\textbackslash 7 & (bell) &  \textbackslash 12 & (newline) &  \textbackslash 40 & (blank) \\
+		\textbackslash 0 & (null) &  \textbackslash 115 & ('M') &  \textbackslash x4d & ('M') \\
+		\hline
+	\end{tabular}%
+\end{table}
+
+Note that if a  \textbackslash is followed by more than three octal digits, only the first three are associated with the  \textbackslash. In contrast,  \textbackslash x used up all the hex digits following it.
+
+We can override the default type of an integer, floating-point, or character literal by supplying a suffix or prefix as listed below.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		L'a'  & wide character literal, type if wchar\_1  \\
+		u8"hi!"& utf-8 string literal (utf-8 encodes a unicode character in 8 bits) \\
+		42ULL & unsigned integer literal, type is unsigned long long \\
+		1E-3F & single precision floating-point literal, type is float \\
+		3.14159L & extended-precision floating-point literal, type is long double \\
+		\hline
+	\end{tabular}%
+\end{table}
+
+\subsection{Variables}
+
+Like iostream, string is defined in namespace std. The string library gives us several ways to initialize string objects. 
+
+It is tempting to think of initialization as a form of assignment, but initialization and assignment are different operations in C++.
+
+\subsection{List Initialization}
+All four ways of initialization below are allowed:
+\begin{itemize}
+	\item{int i=0;}
+	\item{int i =\{0\};}
+	\item{i(0);}
+	\item{i\{0\};}
+\end{itemize}
+
+The generalized use of curly braces for initialization was introduced as part of the new standard, and is referred to as \qd{List Initialization}. When used with variables of built-in type, this form of initialization has one important property: The compiler will not let us list initialize variables of built-in type if the initializer might lead to the loss of information:
+\begin{lstlisting}
+	long double ld=3.1415926536;
+	int a{ld},b={ld}; //error:narrowing conversion required
+	int a(ld),d=ld; //ok, but value will be truncated
+\end{lstlisting}
+
+\subsection{Variable Declarations and Definitions}
+
+A \qd{declaration} makes a name known to the program. A \qd{definition} creates the associated entity. 
+
+A variable declaration specifies the type and name of a variable. A variable definition is a declaration. In addition to specifying the name and type, a definition also allocates storage and may provide the variable with an initial value.
+
+To obtain a declaration that is not also a definition, we add the \textbf{extern} keyword and may not provide an explicit initializer.
+
+Any declaration that includes an explicit initializer is a definition. We can provide an initializer on a variable defined as extern, but doing so override the extern. An extern that has an initializer is a definition .
+\begin{lstlisting}
+	extern int i; //declares but does not define i
+	int j; //declares and defines j
+	extern int k = 1; //definition.
+\end{lstlisting}
+
+It is an error to provide an initializer on an extern inside a function.
+
+\subsection{Scope of a Name}
+
+The name \textbf{main}--- like most names defined outside a function --- has \textbf{global scope}.
+Names defined inside a function has \textbf{block scope}.
+
+To fetch a global scope variable from inner scope, use \textbf{::identifier}
+
+\subsection{Compound Types}
+A \qd{compound type} is a type that is defined in terms of another type. C++ has several compound types, two of which are \qd{references and pointers}.
+
+A \qd{reference} defines an alternative name for an object. A reference type "refers to" another type. We define a reference type by writing a declarator of the form \&d, where d is the name being declared:
+\begin{lstlisting}
+	int ival=1024;
+	int &refVal=ival; //refVal refers to (is another name for) ival
+	int &refVal2; //error:a reference must be initialized
+\end{lstlisting}
+
+Ordinarily, when we initialize a variable, the value of the initializer is copied into the object we are creating. When we define a reference, instead of copying the initializer's value, we \textbf{bind} the reference to its initializer. Once initialized a reference remains bound to its initial object. There is no way to rebind a referenceto refer to a different object. Because of that, reference must be initialized.
+
+A reference is not an object, a reference is just another name for an already existing object.
+\begin{lstlisting}
+	int &refVal3 = refVal; //ok, refVal3 is bound to the object to which refVal is bound, i.e., to ival
+	int i = refVal; //ok, initialize i to the same value as ival
+\end{lstlisting}
+
+Because references are not objects, we may not define a refer  to a reference.
+
+A reference may be bound only to an object, not to a literal or to the result of a more general expression.
+
+\subsection{Pointers}
+A \qd{pointer} is a compound type that "points to" another type. 
+
+Like references, pointers are used for indirect access to other objects.
+
+Unlike a reference, a pointer is an object in its own right. Pointers can be assigned and copied; a single pointer can point to several different objects over its lifetime. 
+
+Unlike a reference, a pointer need not be initialized at the time it is defined. 
+
+Like other built-in types, pointers defined at block scope have undefined value if they are not initialized.
+
+A pointer holds the address of another object. We get the address of an object by using the address-of operator (the \textbf{\& operator}).
+\begin{lstlisting}
+	int ival=42;
+	int *p = &ival; //p holds the address of ival; p is a pointer to ival.
+	*p = 0; //* yields the object, we assign a new value to ival through p
+	cout<<*p;	
+\end{lstlisting} 
+
+Several ways to obtain a null pointer:
+\begin{lstlisting}
+	int *p1 = nullptr; //introduced by the new standard, equivalent to int *p1=0
+	int *p2 = 0; //directly initialize p2 from the literal constant 0;
+	int *p3 = NULL;//must #include <cstdlib>, equivalent to int *p3=0; NULL is defined as 0 by the cstdlib header, and is called a preprocessor variable
+\end{lstlisting}
+Because references are not objects, they don't have addresses. Hence, we may not define a pointer to a reference.
+
+It can be easier to understand complicated pointer or reference declaration if you read them from right to left.
+\begin{lstlisting}
+	int i=42;
+	int *p;
+	int *&r=p; //r si a reference to the pointer p
+	r=&i;
+	*r=0;
+\end{lstlisting}
+
+By default, const objects are local to a file. Sometimes we have a const variable that we want to share across multiple files but whose initializer is not a constant expression. To solve this problem and define a single instance of a const variable, we use the keyword \textbf{extern} on both its definition nd declaration(s):
+\begin{lstlisting}
+	//file_1.cc defines and initializes a const that is accessible to other files
+	extern const int bufSize=fcn(); //specify extern in order for bufSize to be used in other files
+	//file_1.h
+	extern const int bufSize; //extern signifies that bufSize is not local to file_1.h and that its definition will occur elsewhere.
+\end{lstlisting}
+
+\subsubsection{const pointer VS pointer to const}
+\begin{lstlisting}
+	double pi=3.14;
+	const double *ptr = &pi; /*ok,ptr thinks it points to a const double type object, but it may not be true. Yet you can not chnge pi through ptr, because ptr ptr thinks it points to a const double type object*/
+	double *const ptr2=&pi; //ok, ptr2 is a const pointer, it can not be changed to point to another object
+\end{lstlisting}
+
+It may be helpful to think of pointers and references to const as pointers or references "\qd{think they point or refer to const}".
+
+\subsection{constexpr and Constant Expressions}
+A \textbf{constant expression} is an expression whose value cannot change and that can be evaluated at compile time.
+
+Whether a given object (or expression) is a constant expression depends on the types and the initializer.
+
+Under the new standard, we can ask the complier to verify that a variable is a constant expression by declaring the variable in a constexpr declaration. Variables declared as constexpr are implicitly const and must be initialized by constant expression.
+
+It is important to understand that when we define a pointer in a constexpr declaration, the constexpr specifier applies to the pointer, not the type to which the pointer points. The difference is a consequence of the fact that constexpr imposes a top-level const on the objects it defines.
+\begin{lstlisting}
+	const int *p=nullptr; //p is a pointer to a const int
+	constexpr int *q=nullptr;//q is a const pointer to int
+\end{lstlisting}
+
+\subsection{Type Aliases}
+A \qd{type alias} is a name that is a synonym for another type. We can define a type alias in two ways:
+
+Traditionally, we use a typeof:
+\begin{lstlisting}
+	typeof double wages;//wages is a synonym for double
+	typeof wages base, *p;//base is a synonym for double, p for double*
+\end{lstlisting}
+
+The new standard introduced a second way to define a type alias, via an \textbf{alias declaration}:
+\begin{lstlisting}
+	using SI=Sales_item;//SI is a synonym for Sales_item
+\end{lstlisting}
+
+\subsection{The auto Type Specifier}
+
+\subsection{The decltype Type Specifier}
+It is worth noting that \qd{decltype} is the only context in which a variable defined as a reference is not treated as a synonym  for the object to which it refers.
+
+\subsection{Brief Introduction to the Preprocessor}
+The most common technique for making it safe to include a header multiple times relies on the \textbf{preprocessor}. C++ program use the preprocessor to define \textbf{header guard}. Header guards rely on preprocessor variables. Preprocessor variables have one of two possible state: defined or not defined. The \textbf{\#define} directive takes a name and defines that name as a preprocessor variable. There are two other directives that test whether a given preprocessor variable has or has not been defined:\textbf{\#ifdef} and \textbf{\#inndef}.
+\begin{lstlisting}
+	#ifndef SALES_DATA_H
+	#define SALES_DATA_H
+	#include <string>
+	struct Sales_item {
+		std::string bookNo;
+		unsigned units_sold=0;
+		double revenue =0;
+	};
+	#endif
+\end{lstlisting}
+
+\section{Strings, Vectors, and Arrays}
+
+\subsection{Library string Type}
+To use the \textbf{string} type, we must include the string header.
+\begin{lstlisting}
+	#include<string>
+	using std::string;
+	int main(){
+		string s1;
+		string s2=s1;
+		string s3="hiya";
+		string s4(10,'c'); //s4 is "cccccccccc";direct initialization
+		string s5=string(10,'c');//copy initialization
+	}
+\end{lstlisting}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		os<<s           & Write s onto output os. Returns os.                                       \\
+		is>>s           & Reads whitespace-separated                                                \\
+		getLine(is,s)   & Reads a line of input from is into s. Returns is.                         \\
+		s.empty()       & Returns true if s is empty; otherwise returns false                       \\
+		s[n]            & Returns a reference to the char at position n in s;position start at 0.   \\
+		s1+s2           & Returns a string that is a conactenation of s1 and s2                     \\
+		s1=s2           & Replaces characters in s1 with a copy of s2                               \\
+		s1==s2          & The strings s1 and s2 are equal if they contain the same characters       \\
+		s1!=s2          & Equality is canse-sensitive.                                              \\
+		<,<=,>,>=       & Comparisons are case-sensitive and use dictionary ordering.               \\
+		\hline
+	\end{tabular}
+	\caption*{string Operations}
+\end{table}%
+
+
+\end{document}
+
